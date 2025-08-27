@@ -1,5 +1,7 @@
-from .client import Client
+from __future__ import annotations
+
 from . import utils
+from .client import Client
 
 
 class SubClientElectronic(Client):
@@ -15,9 +17,9 @@ class SubClientElectronic(Client):
 
         # Copy cnnection parameters and add info specific to API.
         self.cnxn_params = cnxn_params.copy()
-        self.cnxn_params['api_uri'] = "/almaws/v1/electronic"
-        self.cnxn_params['web_doc'] = "https://developers.exlibrisgroup.com/alma/apis/electronic"
-        self.cnxn_params['wadl_url'] = "https://developers.exlibrisgroup.com/resources/wadl/e7cf39e9-adce-4be1-aeb9-a31f452960da.wadl"
+        self.cnxn_params['api_uri'] = '/almaws/v1/electronic'
+        self.cnxn_params['web_doc'] = 'https://developers.exlibrisgroup.com/alma/apis/electronic'
+        self.cnxn_params['wadl_url'] = 'https://developers.exlibrisgroup.com/resources/wadl/e7cf39e9-adce-4be1-aeb9-a31f452960da.wadl'
         self.cnxn_params['api_uri_full'] = self.cnxn_params['base_uri']
         self.cnxn_params['api_uri_full'] += self.cnxn_params['api_uri']
 
@@ -35,8 +37,10 @@ class SubClientElectronicCollections(Client):
         self.cnxn_params['api_uri'] += '/e-collections'
         self.cnxn_params['api_uri_full'] += '/e-collections'
 
-    def get(self, collection_id=None, query={}, limit=10, offset=0,
-            all_records=False, q_params={}, raw=False):
+    def get(
+        self, collection_id=None, query={}, limit=10, offset=0,
+        all_records=False, q_params={}, raw=False,
+    ):
         """Retrieve a list of electronic collections.
 
         Args:
@@ -62,7 +66,7 @@ class SubClientElectronicCollections(Client):
 
         url = self.cnxn_params['api_uri_full']
         if collection_id:
-            url += ("/" + str(collection_id))
+            url += ('/' + str(collection_id))
         else:
             # include paramets specific to course list
             if int(limit) > 100:
@@ -84,8 +88,10 @@ class SubClientElectronicCollections(Client):
 
         # make multiple api calls until all records are retrieved
         if all_records:
-            response = self.__read_all__(url=url, args=args, raw=raw,
-                                         response=response, data_key='electronic_collection')
+            response = self.__read_all__(
+                url=url, args=args, raw=raw,
+                response=response, data_key='electronic_collection',
+            )
         return response
 
 
@@ -151,7 +157,7 @@ class SubClientElectronicPortfolios(Client):
         url += str(collection_id)
         url += '/e-services'
         url += ('/' + str(service_id))
-        url += "/portfolios"
+        url += '/portfolios'
         if portfolio_id:
             url += ('/' + str(portfolio_id))
         return self.read(url, args, raw=raw)

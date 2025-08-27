@@ -1,5 +1,7 @@
-from .client import Client
+from __future__ import annotations
+
 from . import utils
+from .client import Client
 
 
 class SubClientUsers(Client):
@@ -15,9 +17,9 @@ class SubClientUsers(Client):
 
         # Copy cnnection parameters and add info specific to API.
         self.cnxn_params = cnxn_params.copy()
-        self.cnxn_params['api_uri'] = "/almaws/v1/users"
-        self.cnxn_params['web_doc'] = "https://developers.exlibrisgroup.com/alma/apis/users"
-        self.cnxn_params['wadl_url'] = "https://developers.exlibrisgroup.com/resources/wadl/0aa8d36f-53d6-48ff-8996-485b90b103e4.wadl"
+        self.cnxn_params['api_uri'] = '/almaws/v1/users'
+        self.cnxn_params['web_doc'] = 'https://developers.exlibrisgroup.com/alma/apis/users'
+        self.cnxn_params['wadl_url'] = 'https://developers.exlibrisgroup.com/resources/wadl/0aa8d36f-53d6-48ff-8996-485b90b103e4.wadl'
         self.cnxn_params['api_uri_full'] = self.cnxn_params['base_uri']
         self.cnxn_params['api_uri_full'] += self.cnxn_params['api_uri']
 
@@ -27,8 +29,10 @@ class SubClientUsers(Client):
         self.fees = SubClientUsersFees(self.cnxn_params)
         self.deposits = SubClientUsersDeposits(self.cnxn_params)
 
-    def get(self, user_id=None, query={}, limit=10, offset=0,
-            all_records=False, q_params={}, raw=False):
+    def get(
+        self, user_id=None, query={}, limit=10, offset=0,
+        all_records=False, q_params={}, raw=False,
+    ):
         """Retrieve a user list or a single user.
 
         Args:
@@ -58,7 +62,7 @@ class SubClientUsers(Client):
 
         url = self.cnxn_params['api_uri_full']
         if user_id:
-            url += ("/" + str(user_id))
+            url += ('/' + str(user_id))
         else:
             # include paramets specific to user list
             if int(limit) > 100:
@@ -80,8 +84,10 @@ class SubClientUsers(Client):
 
         # make multiple api calls until all records are retrieved
         if all_records:
-            response = self.__read_all__(url=url, args=args, raw=raw,
-                                         response=response, data_key='user')
+            response = self.__read_all__(
+                url=url, args=args, raw=raw,
+                response=response, data_key='user',
+            )
         return response
 
 
@@ -93,8 +99,10 @@ class SubClientUsersLoans(Client):
         self.cnxn_params['api_uri'] += '/'
         self.cnxn_params['api_uri_full'] += '/'
 
-    def get(self, user_id, loan_id=None, limit=10, offset=0,
-            all_records=False, q_params={}, raw=False):
+    def get(
+        self, user_id, loan_id=None, limit=10, offset=0,
+        all_records=False, q_params={}, raw=False,
+    ):
         """Retrieve a list of loans for a user.
 
         Args:
@@ -116,7 +124,7 @@ class SubClientUsersLoans(Client):
         args['apikey'] = self.cnxn_params['api_key']
 
         url = self.cnxn_params['api_uri_full']
-        url += (str(user_id) + "/loans")
+        url += (str(user_id) + '/loans')
 
         if loan_id:
             url += ('/' + str(loan_id))
@@ -136,8 +144,10 @@ class SubClientUsersLoans(Client):
 
         # make multiple api calls until all records are retrieved
         if all_records:
-            response = self.__read_all__(url=url, args=args, raw=raw,
-                                         response=response, data_key='item_loan')
+            response = self.__read_all__(
+                url=url, args=args, raw=raw,
+                response=response, data_key='item_loan',
+            )
         return response
 
 
@@ -149,8 +159,10 @@ class SubClientUsersRequests(Client):
         self.cnxn_params['api_uri'] += '/'
         self.cnxn_params['api_uri_full'] += '/'
 
-    def get(self, user_id, request_id=None, limit=10, offset=0,
-            all_records=False, q_params={}, raw=False):
+    def get(
+        self, user_id, request_id=None, limit=10, offset=0,
+        all_records=False, q_params={}, raw=False,
+    ):
         """Retrieve a list of requests for a user.
 
         Args:
@@ -172,7 +184,7 @@ class SubClientUsersRequests(Client):
         args['apikey'] = self.cnxn_params['api_key']
 
         url = self.cnxn_params['api_uri_full']
-        url += (str(user_id) + "/requests")
+        url += (str(user_id) + '/requests')
 
         if request_id:
             url += ('/' + str(request_id))
@@ -192,8 +204,10 @@ class SubClientUsersRequests(Client):
 
         # make multiple api calls until all records are retrieved
         if all_records:
-            response = self.__read_all__(url=url, args=args, raw=raw,
-                                         response=response, data_key='user_request')
+            response = self.__read_all__(
+                url=url, args=args, raw=raw,
+                response=response, data_key='user_request',
+            )
         return response
 
 
@@ -238,8 +252,10 @@ class SubClientUsersDeposits(Client):
         self.cnxn_params['api_uri'] += '/'
         self.cnxn_params['api_uri_full'] += '/'
 
-    def get(self, user_id, deposit_id=None, limit=10, offset=0,
-            all_records=False, q_params={}, raw=False):
+    def get(
+        self, user_id, deposit_id=None, limit=10, offset=0,
+        all_records=False, q_params={}, raw=False,
+    ):
         """Retrieve a list of deposits for a user.
 
         Args:
@@ -261,7 +277,7 @@ class SubClientUsersDeposits(Client):
         args['apikey'] = self.cnxn_params['api_key']
 
         url = self.cnxn_params['api_uri_full']
-        url += (str(user_id) + "/deposits")
+        url += (str(user_id) + '/deposits')
 
         if deposit_id:
             url += ('/' + str(deposit_id))
@@ -281,6 +297,8 @@ class SubClientUsersDeposits(Client):
 
         # make multiple api calls until all records are retrieved
         if all_records:
-            response = self.__read_all__(url=url, args=args, raw=raw,
-                                         response=response, data_key='user_deposit')
+            response = self.__read_all__(
+                url=url, args=args, raw=raw,
+                response=response, data_key='user_deposit',
+            )
         return response

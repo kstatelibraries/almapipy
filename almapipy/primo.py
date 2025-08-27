@@ -1,5 +1,7 @@
-from .client import Client
+from __future__ import annotations
+
 from . import utils
+from .client import Client
 
 
 class SubClientPrimoSearch(Client):
@@ -12,13 +14,13 @@ class SubClientPrimoSearch(Client):
 
         # Copy cnnection parameters and add info specific to Bibs.
         self.cnxn_params = cnxn_params.copy()
-        self.cnxn_params['api_uri'] = "/primo/v1/search"
-        self.cnxn_params['web_doc'] = "https://developers.exlibrisgroup.com/primo/apis/search"
-        self.cnxn_params['wadl_url'] = "https://developers.exlibrisgroup.com/resources/wadl/f5643222-bb88-4f3d-b2d6-5029e527c515.wadl"
+        self.cnxn_params['api_uri'] = '/primo/v1/search'
+        self.cnxn_params['web_doc'] = 'https://developers.exlibrisgroup.com/primo/apis/search'
+        self.cnxn_params['wadl_url'] = 'https://developers.exlibrisgroup.com/resources/wadl/f5643222-bb88-4f3d-b2d6-5029e527c515.wadl'
         self.cnxn_params['api_uri_full'] = self.cnxn_params['base_uri']
         self.cnxn_params['api_uri_full'] += self.cnxn_params['api_uri']
 
-    def get(self, query, view_id, tab="default_tab", scope="everything_scope", q_params={}, raw=False):
+    def get(self, query, view_id, tab='default_tab', scope='everything_scope', q_params={}, raw=False):
         """Returns a list of results based on the specified search query
 
         Args:

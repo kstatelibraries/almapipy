@@ -1,6 +1,9 @@
-from .client import Client
-from . import utils
+from __future__ import annotations
+
 import xml.etree.ElementTree as ET
+
+from . import utils
+from .client import Client
 
 
 class SubClientAnalytics(Client):
@@ -14,14 +17,14 @@ class SubClientAnalytics(Client):
         # Copy cnnection parameters and add info specific to API.
         self.cnxn_params = cnxn_params.copy()
         if is_primo:
-            self.cnxn_params['api_uri'] = "/primo/v1/analytics"
+            self.cnxn_params['api_uri'] = '/primo/v1/analytics'
             self.cnxn_params['api_uri_full'] = self.cnxn_params['base_uri']
             self.cnxn_params['api_uri_full'] += self.cnxn_params['api_uri']
             self.reports = SubClientAnalyticsReports(self.cnxn_params)
         else:
-            self.cnxn_params['api_uri'] = "/almaws/v1/analytics"
-            self.cnxn_params['web_doc'] = "https://developers.exlibrisgroup.com/alma/apis/analytics"
-            self.cnxn_params['wadl_url'] = "https://developers.exlibrisgroup.com/resources/wadl/10788916-19f6-4f19-aaf1-c18fa0c31ccd.wadl"
+            self.cnxn_params['api_uri'] = '/almaws/v1/analytics'
+            self.cnxn_params['web_doc'] = 'https://developers.exlibrisgroup.com/alma/apis/analytics'
+            self.cnxn_params['wadl_url'] = 'https://developers.exlibrisgroup.com/resources/wadl/10788916-19f6-4f19-aaf1-c18fa0c31ccd.wadl'
             self.cnxn_params['api_uri_full'] = self.cnxn_params['base_uri']
             self.cnxn_params['api_uri_full'] += self.cnxn_params['api_uri']
             self.cnxn_params['xml_ns']['report'] = 'urn:schemas-microsoft-com:xml-analysis:rowset'
@@ -55,7 +58,7 @@ class SubClientAnalyticsPaths(Client):
         """
         url = self.cnxn_params['api_uri_full']
         if path:
-            url += ("/" + str(path))
+            url += ('/' + str(path))
 
         args = q_params.copy()
         args['apikey'] = self.cnxn_params['api_key']
@@ -71,8 +74,10 @@ class SubClientAnalyticsReports(Client):
         self.cnxn_params['api_uri'] += '/reports'
         self.cnxn_params['api_uri_full'] += '/reports'
 
-    def get(self, path, _filter=None, limit=25, col_names=True, return_json=False,
-            all_records=False, q_params={}, raw=False):
+    def get(
+        self, path, _filter=None, limit=25, col_names=True, return_json=False,
+        all_records=False, q_params={}, raw=False,
+    ):
         """This API returns an Alma Analytics report as XML.
         JSON currently unavailable. Use return_json param to convert after the call.
 
@@ -106,9 +111,9 @@ class SubClientAnalyticsReports(Client):
         args['col_names'] = col_names
         if _filter:
             args['filter'] = _filter
-        row_tag = "{urn:schemas-microsoft-com:xml-analysis:rowset}Row"
-        set_tag = "{urn:schemas-microsoft-com:xml-analysis:rowset}rowset"
-        columns_tag = "{http://www.w3.org/2001/XMLSchema}element"
+        row_tag = '{urn:schemas-microsoft-com:xml-analysis:rowset}Row'
+        set_tag = '{urn:schemas-microsoft-com:xml-analysis:rowset}rowset'
+        columns_tag = '{http://www.w3.org/2001/XMLSchema}element'
         report = self.read(url, args, raw=raw)
 
         if raw:
@@ -137,7 +142,7 @@ class SubClientAnalyticsReports(Client):
                         xml_rows = xml_rows[0]
                         break
                 else:
-                    raise utils.AlmaError("Unable to find XML rowset.")
+                    raise utils.AlmaError('Unable to find XML rowset.')
 
             # make additional api calls and append rows to original xml
             while get_more:
@@ -165,7 +170,7 @@ class SubClientAnalyticsReports(Client):
 
         if return_json:
             # extract column names
-            columns_tag = "{http://www.w3.org/2001/XMLSchema}element"
+            columns_tag = '{http://www.w3.org/2001/XMLSchema}element'
             columns = list(report.iter(columns_tag))
             headers = {}
             for col in columns:
@@ -174,7 +179,7 @@ class SubClientAnalyticsReports(Client):
                     value = col.attrib['{urn:saw-sql}columnHeading']
                 except Exception:
                     value = col.attrib['name']
-                value = value.lower().replace(" ", "_")
+                value = value.lower().replace(' ', '_')
                 headers[key] = value
 
             # find report content in XML report
@@ -189,10 +194,10 @@ class SubClientAnalyticsReports(Client):
                         rows = rows[0]
                         break
                 else:
-                    raise utils.AlmaError("Unable to find XML rowset.")
+                    raise utils.AlmaError('Unable to find XML rowset.')
                 if len(rows) > 1:
                     # report is possibly not empty. check xml structure.
-                    raise utils.AlmaError("Unable to find XML rows but rowset has data. Check XML structure.")
+                    raise utils.AlmaError('Unable to find XML rows but rowset has data. Check XML structure.')
                 else:
                     return []  # this report is empty
 

@@ -1,5 +1,7 @@
-from .client import Client
+from __future__ import annotations
+
 from . import utils
+from .client import Client
 
 
 class SubClientConfiguration(Client):
@@ -15,9 +17,9 @@ class SubClientConfiguration(Client):
 
         # Copy cnnection parameters and add info specific to API.
         self.cnxn_params = cnxn_params.copy()
-        self.cnxn_params['api_uri'] = "/almaws/v1/conf"
-        self.cnxn_params['web_doc'] = "https://developers.exlibrisgroup.com/alma/apis/conf"
-        self.cnxn_params['wadl_url'] = "https://developers.exlibrisgroup.com/resources/wadl/37088dc9-c685-4641-bc7f-60b5ca7cabed.wadl"
+        self.cnxn_params['api_uri'] = '/almaws/v1/conf'
+        self.cnxn_params['web_doc'] = 'https://developers.exlibrisgroup.com/alma/apis/conf'
+        self.cnxn_params['wadl_url'] = 'https://developers.exlibrisgroup.com/resources/wadl/37088dc9-c685-4641-bc7f-60b5ca7cabed.wadl'
         self.cnxn_params['api_uri_full'] = self.cnxn_params['base_uri']
         self.cnxn_params['api_uri_full'] += self.cnxn_params['api_uri']
 
@@ -55,7 +57,7 @@ class SubClientConfigurationUnits(Client):
         url = self.cnxn_params['api_uri_full']
         url += '/libraries'
         if library_id:
-            url += ("/" + str(library_id))
+            url += ('/' + str(library_id))
 
         response = self.read(url, args, raw=raw)
         return response
@@ -77,9 +79,9 @@ class SubClientConfigurationUnits(Client):
         args['apikey'] = self.cnxn_params['api_key']
 
         url = self.cnxn_params['api_uri_full']
-        url += ('/libraries/' + str(library_id) + "/locations")
+        url += ('/libraries/' + str(library_id) + '/locations')
         if location_id:
-            url += ("/" + str(location_id))
+            url += ('/' + str(location_id))
 
         response = self.read(url, args, raw=raw)
         return response
@@ -127,7 +129,7 @@ class SubClientConfigurationGeneral(Client):
         args['apikey'] = self.cnxn_params['api_key']
 
         url = self.cnxn_params['api_uri_full']
-        url += "/general"
+        url += '/general'
 
         response = self.read(url, args, raw=raw)
         return response
@@ -156,7 +158,7 @@ class SubClientConfigurationGeneral(Client):
 
         if library_id:
             url += '/libraries'
-            url += ("/" + str(library_id))
+            url += ('/' + str(library_id))
 
         url += '/open-hours'
 
@@ -198,8 +200,10 @@ class SubClientConfigurationJobs(Client):
         self.cnxn_params['api_uri'] += '/jobs'
         self.cnxn_params['api_uri_full'] += '/jobs'
 
-    def get(self, job_id=None, limit=10, offset=0, all_records=False,
-            q_params={}, raw=False):
+    def get(
+        self, job_id=None, limit=10, offset=0, all_records=False,
+        q_params={}, raw=False,
+    ):
         """Retrieve a list of jobs that can be submitted or details for a given job.
 
         Args:
@@ -222,7 +226,7 @@ class SubClientConfigurationJobs(Client):
         url = self.cnxn_params['api_uri_full']
 
         if job_id:
-            url += ("/" + str(job_id))
+            url += ('/' + str(job_id))
         else:
 
             if int(limit) > 100:
@@ -241,12 +245,16 @@ class SubClientConfigurationJobs(Client):
 
         # make multiple api calls until all records are retrieved
         if all_records:
-            response = self.__read_all__(url=url, args=args, raw=raw,
-                                         response=response, data_key='job')
+            response = self.__read_all__(
+                url=url, args=args, raw=raw,
+                response=response, data_key='job',
+            )
         return response
 
-    def get_instances(self, job_id, instance_id=None, limit=10, offset=0,
-                      all_records=False, q_params={}, raw=False):
+    def get_instances(
+        self, job_id, instance_id=None, limit=10, offset=0,
+        all_records=False, q_params={}, raw=False,
+    ):
         """Retrieve all the job instances (runs) for a given job id, or specific instance.
 
         Args:
@@ -268,10 +276,10 @@ class SubClientConfigurationJobs(Client):
         args['apikey'] = self.cnxn_params['api_key']
 
         url = self.cnxn_params['api_uri_full']
-        url += ("/" + str(job_id) + "/instances")
+        url += ('/' + str(job_id) + '/instances')
 
         if instance_id:
-            url += ("/" + str(instance_id))
+            url += ('/' + str(instance_id))
         else:
 
             if int(limit) > 100:
@@ -290,8 +298,10 @@ class SubClientConfigurationJobs(Client):
 
         # make multiple api calls until all records are retrieved
         if all_records:
-            response = self.__read_all__(url=url, args=args, raw=raw,
-                                         response=response, data_key='job_instance')
+            response = self.__read_all__(
+                url=url, args=args, raw=raw,
+                response=response, data_key='job_instance',
+            )
         return response
 
 
@@ -306,9 +316,11 @@ class SubClientConfigurationSets(Client):
         self.cnxn_params['api_uri'] += '/sets'
         self.cnxn_params['api_uri_full'] += '/sets'
 
-    def get(self, set_id=None, content_type=None, set_type=None,
-            query={}, limit=10, offset=0, all_records=False,
-            q_params={}, raw=False):
+    def get(
+        self, set_id=None, content_type=None, set_type=None,
+        query={}, limit=10, offset=0, all_records=False,
+        q_params={}, raw=False,
+    ):
         """Retrieve a list of sets or a single set.
 
         Args:
@@ -335,7 +347,7 @@ class SubClientConfigurationSets(Client):
 
         url = self.cnxn_params['api_uri_full']
         if set_id:
-            url += ("/" + str(set_id))
+            url += ('/' + str(set_id))
         else:
             # include paramets specific to user list
             if int(limit) > 100:
@@ -360,12 +372,16 @@ class SubClientConfigurationSets(Client):
 
         # make multiple api calls until all records are retrieved
         if all_records:
-            response = self.__read_all__(url=url, args=args, raw=raw,
-                                         response=response, data_key='set')
+            response = self.__read_all__(
+                url=url, args=args, raw=raw,
+                response=response, data_key='set',
+            )
         return response
 
-    def get_members(self, set_id, limit=10, offset=0, all_records=False,
-                    q_params={}, raw=False):
+    def get_members(
+        self, set_id, limit=10, offset=0, all_records=False,
+        q_params={}, raw=False,
+    ):
         """Retrieves members of a Set given a Set ID.
 
         Args:
@@ -386,7 +402,7 @@ class SubClientConfigurationSets(Client):
         args['apikey'] = self.cnxn_params['api_key']
 
         url = self.cnxn_params['api_uri_full']
-        url += ("/" + str(set_id) + "/members")
+        url += ('/' + str(set_id) + '/members')
 
         if int(limit) > 100:
             limit = 100
@@ -401,8 +417,10 @@ class SubClientConfigurationSets(Client):
 
         # make multiple api calls until all records are retrieved
         if all_records:
-            response = self.__read_all__(url=url, args=args, raw=raw,
-                                         response=response, data_key='member')
+            response = self.__read_all__(
+                url=url, args=args, raw=raw,
+                response=response, data_key='member',
+            )
         return response
 
 
@@ -414,8 +432,10 @@ class SubClientConfigurationDeposit(Client):
         self.cnxn_params['api_uri'] += '/deposit-profiles'
         self.cnxn_params['api_uri_full'] += '/deposit-profiles'
 
-    def get(self, deposit_profile_id=None, limit=10, offset=0, all_records=False,
-            q_params={}, raw=False):
+    def get(
+        self, deposit_profile_id=None, limit=10, offset=0, all_records=False,
+        q_params={}, raw=False,
+    ):
         """Retrieves list of deposit profiles or specific profile
 
         Args:
@@ -437,7 +457,7 @@ class SubClientConfigurationDeposit(Client):
 
         url = self.cnxn_params['api_uri_full']
         if deposit_profile_id:
-            url += ("/" + str(deposit_profile_id))
+            url += ('/' + str(deposit_profile_id))
 
         if int(limit) > 100:
             limit = 100
@@ -455,8 +475,10 @@ class SubClientConfigurationDeposit(Client):
 
         # make multiple api calls until all records are retrieved
         if all_records:
-            response = self.__read_all__(url=url, args=args, raw=raw,
-                                         response=response, data_key='deposit_profile')
+            response = self.__read_all__(
+                url=url, args=args, raw=raw,
+                response=response, data_key='deposit_profile',
+            )
 
 
 class SubClientConfigurationImport(Client):
@@ -467,8 +489,10 @@ class SubClientConfigurationImport(Client):
         self.cnxn_params['api_uri'] += '/md-import-profiles'
         self.cnxn_params['api_uri_full'] += '/md-import-profiles'
 
-    def get(self, profile_id=None, limit=10, offset=0, all_records=False,
-            q_params={}, raw=False):
+    def get(
+        self, profile_id=None, limit=10, offset=0, all_records=False,
+        q_params={}, raw=False,
+    ):
         """Retrieves list of import profiles or specific profile
 
         Args:
@@ -490,7 +514,7 @@ class SubClientConfigurationImport(Client):
 
         url = self.cnxn_params['api_uri_full']
         if profile_id:
-            url += ("/" + str(profile_id))
+            url += ('/' + str(profile_id))
 
         if int(limit) > 100:
             limit = 100
@@ -508,8 +532,10 @@ class SubClientConfigurationImport(Client):
 
         # make multiple api calls until all records are retrieved
         if all_records:
-            response = self.__read_all__(url=url, args=args, raw=raw,
-                                         response=response, data_key='import_profile')
+            response = self.__read_all__(
+                url=url, args=args, raw=raw,
+                response=response, data_key='import_profile',
+            )
         return response
 
 
@@ -521,8 +547,10 @@ class SubClientConfigurationReminders(Client):
         self.cnxn_params['api_uri'] += '/reminders'
         self.cnxn_params['api_uri_full'] += '/reminders'
 
-    def get(self, reminder_id=None, limit=10, offset=0, all_records=False,
-            q_params={}, raw=False):
+    def get(
+        self, reminder_id=None, limit=10, offset=0, all_records=False,
+        q_params={}, raw=False,
+    ):
         """Retrieves list of reminders or specific reminder.
 
         Args:
@@ -544,7 +572,7 @@ class SubClientConfigurationReminders(Client):
 
         url = self.cnxn_params['api_uri_full']
         if reminder_id:
-            url += ("/" + str(reminder_id))
+            url += ('/' + str(reminder_id))
 
         if int(limit) > 100:
             limit = 100
@@ -562,6 +590,8 @@ class SubClientConfigurationReminders(Client):
 
         # make multiple api calls until all records are retrieved
         if all_records:
-            response = self.__read_all__(url=url, args=args, raw=raw,
-                                         response=response, data_key='reminder')
+            response = self.__read_all__(
+                url=url, args=args, raw=raw,
+                response=response, data_key='reminder',
+            )
         return response

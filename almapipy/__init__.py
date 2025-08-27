@@ -1,8 +1,9 @@
 """
 Python client for Ex Libris Alma and Primo
 """
-__author__ = "Steve Pelkey (spelkey@ucdavis.edu)"
-__version__ = "0.0.9"
+from __future__ import annotations
+__author__ = 'Steve Pelkey (spelkey@ucdavis.edu)'
+__version__ = '0.0.9'
 
 import os
 
@@ -42,15 +43,17 @@ class AlmaCnxn(Client):
         super(AlmaCnxn, self).__init__()
 
         # determine base uri based on location
-        locations = {'America': 'https://api-na.hosted.exlibrisgroup.com',
-                     'Europe': 'https://api-eu.hosted.exlibrisgroup.com',
-                     'Asia Pacific': 'https://api-ap.hosted.exlibrisgroup.com',
-                     'Canada': 'https://api-ca.hosted.exlibrisgroup.com',
-                     'China': 'https://api-cn.hosted.exlibrisgroup.com'}
+        locations = {
+            'America': 'https://api-na.hosted.exlibrisgroup.com',
+            'Europe': 'https://api-eu.hosted.exlibrisgroup.com',
+            'Asia Pacific': 'https://api-ap.hosted.exlibrisgroup.com',
+            'Canada': 'https://api-ca.hosted.exlibrisgroup.com',
+            'China': 'https://api-cn.hosted.exlibrisgroup.com',
+        }
         if location != 'America':
             if location not in locations.keys():
-                message = "Valid location arguments are "
-                message += ", ".join(locations.keys())
+                message = 'Valid location arguments are '
+                message += ', '.join(locations.keys())
                 raise utils.ArgError(message=message)
         self.cnxn_params['location'] = location
         self.cnxn_params['base_uri'] = locations[location]
@@ -106,15 +109,17 @@ class PrimoCnxn(Client):
         super(PrimoCnxn, self).__init__()
 
         # determine base uri based on location
-        locations = {'America': 'https://api-na.hosted.exlibrisgroup.com',
-                     'Europe': 'https://api-eu.hosted.exlibrisgroup.com',
-                     'Asia Pacific': 'https://api-ap.hosted.exlibrisgroup.com',
-                     'Canada': 'https://api-ca.hosted.exlibrisgroup.com',
-                     'China': 'https://api-cn.hosted.exlibrisgroup.com'}
+        locations = {
+            'America': 'https://api-na.hosted.exlibrisgroup.com',
+            'Europe': 'https://api-eu.hosted.exlibrisgroup.com',
+            'Asia Pacific': 'https://api-ap.hosted.exlibrisgroup.com',
+            'Canada': 'https://api-ca.hosted.exlibrisgroup.com',
+            'China': 'https://api-cn.hosted.exlibrisgroup.com',
+        }
         if location != 'America':
             if location not in locations.keys():
-                message = "Valid location arguments are "
-                message += ", ".join(locations.keys())
+                message = 'Valid location arguments are '
+                message += ', '.join(locations.keys())
                 raise utils.ArgError(message=message)
         self.cnxn_params['location'] = location
         self.cnxn_params['base_uri'] = locations[location]

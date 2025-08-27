@@ -1,5 +1,7 @@
-from .client import Client
+from __future__ import annotations
+
 from . import utils
+from .client import Client
 
 
 class SubClientBibs(Client):
@@ -12,9 +14,9 @@ class SubClientBibs(Client):
 
         # Copy cnnection parameters and add info specific to Bibs.
         self.cnxn_params = cnxn_params.copy()
-        self.cnxn_params['api_uri'] = "/almaws/v1/bibs"
-        self.cnxn_params['web_doc'] = "https://developers.exlibrisgroup.com/alma/apis/bibs"
-        self.cnxn_params['wadl_url'] = "https://developers.exlibrisgroup.com/resources/wadl/af2fb69d-64f4-42bc-bb05-d8a0ae56936e.wadl"
+        self.cnxn_params['api_uri'] = '/almaws/v1/bibs'
+        self.cnxn_params['web_doc'] = 'https://developers.exlibrisgroup.com/alma/apis/bibs'
+        self.cnxn_params['wadl_url'] = 'https://developers.exlibrisgroup.com/resources/wadl/af2fb69d-64f4-42bc-bb05-d8a0ae56936e.wadl'
         self.cnxn_params['api_uri_full'] = self.cnxn_params['base_uri']
         self.cnxn_params['api_uri_full'] += self.cnxn_params['api_uri']
 
@@ -55,7 +57,7 @@ class SubClientBibsCatalog(Client):
 
         # validate arguments
         if type(bib_ids) != list and type(bib_ids) != str:
-            message = "bib_ids must be a list of ids, or single string."
+            message = 'bib_ids must be a list of ids, or single string.'
             raise utils.ArgError(message)
 
         # format arguments
@@ -66,7 +68,7 @@ class SubClientBibsCatalog(Client):
         if type(bib_ids) == str:
             url += ('/' + bib_ids)
         else:
-            args['mms_id'] = ",".join(bib_ids)
+            args['mms_id'] = ','.join(bib_ids)
 
         if expand:
             args['expand'] = expand
@@ -94,7 +96,7 @@ class SubClientBibsCatalog(Client):
                 for a given bib record ID.
         """
         url = self.cnxn_params['api_uri_full']
-        url += ("/" + str(bib_id))
+        url += ('/' + str(bib_id))
         url += '/holdings'
         if holding_id:
             url += ('/' + str(holding_id))
@@ -121,7 +123,7 @@ class SubClientBibsCatalog(Client):
                 for a given bib record ID.
         """
         url = self.cnxn_params['api_uri_full']
-        url += ("/" + str(bib_id))
+        url += ('/' + str(bib_id))
         url += ('/holdings/' + str(holding_id)) + '/items'
         if item_id:
             url += ('/' + str(item_id))
@@ -150,7 +152,7 @@ class SubClientBibsCatalog(Client):
             Returns a list or single portfolio for a Bib.
         """
         url = self.cnxn_params['api_uri_full']
-        url += ("/" + str(bib_id))
+        url += ('/' + str(bib_id))
         url += '/portfolios'
         if portfolio_id:
             url += ('/' + str(portfolio_id))
@@ -160,8 +162,10 @@ class SubClientBibsCatalog(Client):
 
         return self.read(url, args, raw=raw)
 
-    def post(self, data, from_nz_mms_id=None, normalization=None, validate=False,
-             q_params={}, raw=False):
+    def post(
+        self, data, from_nz_mms_id=None, normalization=None, validate=False,
+        q_params={}, raw=False,
+    ):
         """Creates a new Bib record or local record for a NZ record.
 
         Args:
@@ -212,7 +216,7 @@ class SubClientBibsCatalog(Client):
 
         """
         url = self.cnxn_params['api_uri_full']
-        url += ("/" + str(bib_id))
+        url += ('/' + str(bib_id))
         url += '/holdings'
         object_type = 'holding'
 
@@ -241,9 +245,9 @@ class SubClientBibsCatalog(Client):
 
         """
         url = self.cnxn_params['api_uri_full']
-        url += ("/" + str(bib_id))
+        url += ('/' + str(bib_id))
         url += '/holdings/'
-        url += (str(holding_id) + "/items")
+        url += (str(holding_id) + '/items')
         object_type = 'item'
 
         args = q_params.copy()
@@ -281,7 +285,7 @@ class SubClientBibsCollections(Client):
         """
         url = self.cnxn_params['api_uri_full']
         if pid:
-            url += ("/" + str(pid))
+            url += ('/' + str(pid))
 
         args = q_params.copy()
         args['apikey'] = self.cnxn_params['api_key']
@@ -305,7 +309,7 @@ class SubClientBibsCollections(Client):
 
         """
         url = self.cnxn_params['api_uri_full']
-        url += ("/" + str(pid))
+        url += ('/' + str(pid))
         url += '/bibs'
 
         args = q_params.copy()
@@ -352,7 +356,7 @@ class SubClientBibsCollections(Client):
 
         """
         url = self.cnxn_params['api_uri_full']
-        url += ("/" + str(pid))
+        url += ('/' + str(pid))
         url += '/bibs'
 
         object_type = 'bib'
@@ -371,8 +375,10 @@ class SubClientBibsLoans(Client):
     def __init__(self, cnxn_params={}):
         self.cnxn_params = cnxn_params.copy()
 
-    def get_by_item(self, bib_id, holding_id, item_id,
-                    loan_id=None, q_params={}, raw=False):
+    def get_by_item(
+        self, bib_id, holding_id, item_id,
+        loan_id=None, q_params={}, raw=False,
+    ):
         """Returns Loan by Item information.
 
         Args:
@@ -387,9 +393,9 @@ class SubClientBibsLoans(Client):
             List of loans or a single loan for a given item.
         """
         url = self.cnxn_params['api_uri_full']
-        url += ("/" + str(bib_id))
+        url += ('/' + str(bib_id))
         url += ('/holdings/' + str(holding_id))
-        url += ('/items/' + str(item_id) + "/loans")
+        url += ('/items/' + str(item_id) + '/loans')
         if loan_id:
             url += ('/' + str(loan_id))
 
@@ -411,7 +417,7 @@ class SubClientBibsLoans(Client):
             List of loans or a single loan for a given title.
         """
         url = self.cnxn_params['api_uri_full']
-        url += ("/" + str(bib_id) + '/loans')
+        url += ('/' + str(bib_id) + '/loans')
         if loan_id:
             url += ('/' + str(loan_id))
 
@@ -438,9 +444,9 @@ class SubClientBibsLoans(Client):
 
         """
         url = self.cnxn_params['api_uri_full']
-        url += ("/" + str(bib_id))
+        url += ('/' + str(bib_id))
         url += ('/holdings/' + str(holding_id))
-        url += ('/items/' + str(item_id) + "/loans")
+        url += ('/items/' + str(item_id) + '/loans')
 
         object_type = 'item_loan'
 
@@ -459,8 +465,10 @@ class SubClientBibsRequests(Client):
     def __init__(self, cnxn_params={}):
         self.cnxn_params = cnxn_params.copy()
 
-    def get_by_item(self, bib_id, holding_id, item_id,
-                    request_id=None, q_params={}, raw=False):
+    def get_by_item(
+        self, bib_id, holding_id, item_id,
+        request_id=None, q_params={}, raw=False,
+    ):
         """Returns Loan by Item information.
 
         Args:
@@ -475,9 +483,9 @@ class SubClientBibsRequests(Client):
             List of loans or a single loan for a given item.
         """
         url = self.cnxn_params['api_uri_full']
-        url += ("/" + str(bib_id))
+        url += ('/' + str(bib_id))
         url += ('/holdings/' + str(holding_id))
-        url += ('/items/' + str(item_id) + "/requests")
+        url += ('/items/' + str(item_id) + '/requests')
         if request_id:
             url += ('/' + str(request_id))
 
@@ -499,7 +507,7 @@ class SubClientBibsRequests(Client):
             List of loans or a single loan for a given title.
         """
         url = self.cnxn_params['api_uri_full']
-        url += ("/" + str(bib_id) + '/requests')
+        url += ('/' + str(bib_id) + '/requests')
         if request_id:
             url += ('/' + str(request_id))
 
@@ -508,8 +516,10 @@ class SubClientBibsRequests(Client):
 
         return self.read(url, args, raw=raw)
 
-    def get_availability(self, bib_id, period, period_type='days',
-                         holding_id=None, item_id=None, q_params={}, raw=False):
+    def get_availability(
+        self, bib_id, period, period_type='days',
+        holding_id=None, item_id=None, q_params={}, raw=False,
+    ):
         """Returns list of periods in which specific title or item
         is unavailable for booking.
 
@@ -530,15 +540,15 @@ class SubClientBibsRequests(Client):
             List of periods title/item is unavailable for booking.
         """
         url = self.cnxn_params['api_uri_full']
-        url += ("/" + str(bib_id))
+        url += ('/' + str(bib_id))
         if holding_id and item_id:
-            url += ("/holdings/" + str(holding_id))
+            url += ('/holdings/' + str(holding_id))
             url += ('/items/' + str(item_id))
         elif holding_id or item_id:
-            message = "If getting availability for an item, "
-            message += "Both holding_id and item_id are required arguments."
+            message = 'If getting availability for an item, '
+            message += 'Both holding_id and item_id are required arguments.'
             raise utils.ArgError(message)
-        url += "/booking-availability"
+        url += '/booking-availability'
 
         args = q_params.copy()
         args['apikey'] = self.cnxn_params['api_key']
@@ -547,9 +557,11 @@ class SubClientBibsRequests(Client):
 
         return self.read(url, args, raw=raw)
 
-    def get_options(self, bib_id, user_id='GUEST',
-                    holding_id=None, item_id=None,
-                    q_params={}, raw=False):
+    def get_options(
+        self, bib_id, user_id='GUEST',
+        holding_id=None, item_id=None,
+        q_params={}, raw=False,
+    ):
         """Returns request options for a specific title or item based on user.
 
         To get a specific item, holding_id and item_id parameters are required.
@@ -568,15 +580,15 @@ class SubClientBibsRequests(Client):
             Request options for a specific title or item based on user.
         """
         url = self.cnxn_params['api_uri_full']
-        url += ("/" + str(bib_id))
+        url += ('/' + str(bib_id))
         if holding_id and item_id:
-            url += ("/holdings/" + str(holding_id))
+            url += ('/holdings/' + str(holding_id))
             url += ('/items/' + str(item_id))
         elif holding_id or item_id:
-            message = "If getting request options for an item, "
-            message += "Both holding_id and item_id are required arguments."
+            message = 'If getting request options for an item, '
+            message += 'Both holding_id and item_id are required arguments.'
             raise utils.ArgError(message)
-        url += "/request-options"
+        url += '/request-options'
 
         args = q_params.copy()
         args['apikey'] = self.cnxn_params['api_key']
@@ -601,7 +613,7 @@ class SubClientBibsRequests(Client):
 
         """
         url = self.cnxn_params['api_uri_full']
-        url += ("/" + str(bib_id))
+        url += ('/' + str(bib_id))
         url += ('/requests')
 
         object_type = 'user_request'
@@ -616,8 +628,10 @@ class SubClientBibsRequests(Client):
 
         return response
 
-    def post_for_item(self, data, bib_id, holding_id,
-                      item_id, user_id=None, q_params={}, raw=False):
+    def post_for_item(
+        self, data, bib_id, holding_id,
+        item_id, user_id=None, q_params={}, raw=False,
+    ):
         """Creates a request for a library resouce.
         The request can be for a physical item (request types: hold, booking),
         or a request for digitizing a file (request type: digitization)
@@ -636,9 +650,9 @@ class SubClientBibsRequests(Client):
 
         """
         url = self.cnxn_params['api_uri_full']
-        url += ("/" + str(bib_id))
+        url += ('/' + str(bib_id))
         url += ('/holdings/' + holding_id)
-        url += ('/items/' + item_id + "/requests")
+        url += ('/items/' + item_id + '/requests')
 
         object_type = 'user_request'
 
@@ -672,8 +686,8 @@ class SubClientBibsRepresentations(Client):
 
         """
         url = self.cnxn_params['api_uri_full']
-        url += ("/" + str(bib_id))
-        url += "/representations"
+        url += ('/' + str(bib_id))
+        url += '/representations'
 
         args = q_params.copy()
         args['apikey'] = self.cnxn_params['api_key']
@@ -696,11 +710,11 @@ class SubClientBibsRepresentations(Client):
 
         """
         url = self.cnxn_params['api_uri_full']
-        url += ("/" + str(bib_id))
-        url += "/representations/"
+        url += ('/' + str(bib_id))
+        url += '/representations/'
         url += rep_id
         if files:
-            url += "/files"
+            url += '/files'
 
         args = q_params.copy()
         args['apikey'] = self.cnxn_params['api_key']
@@ -722,7 +736,7 @@ class SubClientBibsRepresentations(Client):
 
         """
         url = self.cnxn_params['api_uri_full']
-        url += ("/" + str(bib_id) + '/representations/')
+        url += ('/' + str(bib_id) + '/representations/')
 
         object_type = 'representation'
 
@@ -750,8 +764,8 @@ class SubClientBibsRepresentations(Client):
 
         """
         url = self.cnxn_params['api_uri_full']
-        url += ("/" + str(bib_id))
-        url += ('/representations/' + str(rep_id) + "/files")
+        url += ('/' + str(bib_id))
+        url += ('/representations/' + str(rep_id) + '/files')
 
         object_type = 'representation'
 
@@ -782,8 +796,8 @@ class SubClientBibsLinkedData(Client):
 
         """
         url = self.cnxn_params['api_uri_full']
-        url += "/linked-open-data"
-        url += ("/" + str(bib_id))
+        url += '/linked-open-data'
+        url += ('/' + str(bib_id))
 
         args = q_params.copy()
         args['apikey'] = self.cnxn_params['api_key']

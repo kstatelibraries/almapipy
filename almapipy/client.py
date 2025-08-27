@@ -1,6 +1,7 @@
 """
 Common Client for interacting with Alma API
 """
+from __future__ import annotations
 
 import json
 import xml.etree.ElementTree as ET
@@ -59,7 +60,7 @@ class Client(object):
             if type(data) == ET or type(data) == ET.Element:
                 data = ET.tostring(data, encoding='unicode')
             elif type(data) != str:
-                message = "XML payload must be either string or ElementTree."
+                message = 'XML payload must be either string or ElementTree.'
                 raise utils.ArgError(message)
         else:
             message = "Post content type must be either 'json' or 'xml'"
@@ -114,17 +115,17 @@ class Client(object):
         Returns:
             String of query.
         """
-        q_str = ""
+        q_str = ''
         i = 0
         if type(query) != 'dict':
-            message = "Brief search query must be a dictionary."
+            message = 'Brief search query must be a dictionary.'
         for field, filter_value in query.items():
             field = str(field)
             filter_value = str(filter_value)
             if i > 0:
-                q_str += " AND "
-            q_str += (field + "~")
-            q_str += filter_value.replace(" ", "_")
+                q_str += ' AND '
+            q_str += (field + '~')
+            q_str += filter_value.replace(' ', '_')
             i += 1
 
         return q_str
@@ -202,8 +203,8 @@ class Client(object):
         url = response.url
         try:
             response_type = response.headers['Content-Type']
-            if ";" in response_type:
-                response_type, charset = response_type.split(";")
+            if ';' in response_type:
+                response_type, charset = response_type.split(';')
         except:
             message = 'Error ' + str(status) + response.text
             raise utils.AlmaError(message, status, url)
@@ -216,13 +217,13 @@ class Client(object):
             # Received response from ex libris, but error retrieving data.
             if str(status)[0] in ['4', '5']:
                 try:
-                    first_error = content.find("header:errorList", xml_ns)[0]
-                    message = first_error.find("header:errorCode", xml_ns).text
-                    message += " - "
-                    message += first_error.find("header:errorMessage", xml_ns).text
-                    message += " See Alma documentation for more information."
+                    first_error = content.find('header:errorList', xml_ns)[0]
+                    message = first_error.find('header:errorCode', xml_ns).text
+                    message += ' - '
+                    message += first_error.find('header:errorMessage', xml_ns).text
+                    message += ' See Alma documentation for more information.'
                 except:
-                    message = 'Error ' + str(status) + " - " + str(content)
+                    message = 'Error ' + str(status) + ' - ' + str(content)
                 raise utils.AlmaError(message, status, url)
 
         # decode response if json.
@@ -237,20 +238,20 @@ class Client(object):
                     else:
                         first_error = content['errorList']['error'][0]
                     message = first_error['errorCode']
-                    message += " - "
+                    message += ' - '
                     message += first_error['errorMessage']
                     if 'trackingID' in first_error.keys():
-                        message += "TrackingID: " + message['trackingID']
-                    message += " See Alma documentation for more information."
+                        message += 'TrackingID: ' + message['trackingID']
+                    message += ' See Alma documentation for more information.'
                 except:
-                    message = 'Error ' + str(status) + " - " + str(content)
+                    message = 'Error ' + str(status) + ' - ' + str(content)
                 raise utils.AlmaError(message, status, url)
 
         else:
             content = response
 
             if str(status)[0] in ['4', '5']:
-                message = str(status) + " - "
+                message = str(status) + ' - '
                 message += str(content.text)
                 raise utils.AlmaError(message, status, url)
         return content

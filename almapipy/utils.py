@@ -1,6 +1,7 @@
 """
 Error classes and other helpful functions
 """
+from __future__ import annotations
 
 
 class Error(Exception):
@@ -23,4 +24,4 @@ class AlmaError(Error):
 class ArgError(Error):
     def __init__(self, message):
         super(ArgError, self).__init__(message)
-        self.message = "Invalid Argument: " + message
+        self.message = 'Invalid Argument: ' + message

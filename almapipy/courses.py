@@ -1,5 +1,7 @@
-from .client import Client
+from __future__ import annotations
+
 from . import utils
+from .client import Client
 
 
 class SubClientCourses(Client):
@@ -14,9 +16,9 @@ class SubClientCourses(Client):
 
         # Copy cnnection parameters and add info specific to API.
         self.cnxn_params = cnxn_params.copy()
-        self.cnxn_params['api_uri'] = "/almaws/v1/courses"
-        self.cnxn_params['web_doc'] = "https://developers.exlibrisgroup.com/alma/apis/courses"
-        self.cnxn_params['wadl_url'] = "https://developers.exlibrisgroup.com/resources/wadl/25ede018-da5d-4780-8fda-a8e5d103faba.wadl"
+        self.cnxn_params['api_uri'] = '/almaws/v1/courses'
+        self.cnxn_params['web_doc'] = 'https://developers.exlibrisgroup.com/alma/apis/courses'
+        self.cnxn_params['wadl_url'] = 'https://developers.exlibrisgroup.com/resources/wadl/25ede018-da5d-4780-8fda-a8e5d103faba.wadl'
         self.cnxn_params['api_uri_full'] = self.cnxn_params['base_uri']
         self.cnxn_params['api_uri_full'] += self.cnxn_params['api_uri']
         #self.cnxn_params['xml_ns']['report'] = 'urn:schemas-microsoft-com:xml-analysis:rowset'
@@ -27,8 +29,10 @@ class SubClientCourses(Client):
         self.owners = SubClientCoursesOwners(self.cnxn_params)
         self.tags = SubClientCoursesTags(self.cnxn_params)
 
-    def get(self, course_id=None, query={}, limit=10, offset=0,
-            all_records=False, q_params={}, raw=False):
+    def get(
+        self, course_id=None, query={}, limit=10, offset=0,
+        all_records=False, q_params={}, raw=False,
+    ):
         """Retrieve a courses list or a single course.
 
         Args:
@@ -57,7 +61,7 @@ class SubClientCourses(Client):
 
         url = self.cnxn_params['api_uri_full']
         if course_id:
-            url += ("/" + str(course_id))
+            url += ('/' + str(course_id))
         else:
             # include paramets specific to course list
             if int(limit) > 100:
@@ -79,8 +83,10 @@ class SubClientCourses(Client):
 
         # make multiple api calls until all records are retrieved
         if all_records:
-            response = self.__read_all__(url=url, args=args, raw=raw,
-                                         response=response, data_key='course')
+            response = self.__read_all__(
+                url=url, args=args, raw=raw,
+                response=response, data_key='course',
+            )
         return response
 
 
@@ -226,6 +232,6 @@ class SubClientCoursesTags(Client):
         url += '/reading-lists'
         url += ('/' + str(reading_list_id))
         url += '/citations'
-        url += ('/' + str(citation_id) + "/tags")
+        url += ('/' + str(citation_id) + '/tags')
 
         return self.read(url, args, raw=raw)

@@ -1,5 +1,7 @@
-from .client import Client
+from __future__ import annotations
+
 from . import utils
+from .client import Client
 
 
 class SubClientAcquistions(Client):
@@ -15,9 +17,9 @@ class SubClientAcquistions(Client):
 
         # Copy cnnection parameters and add info specific to API.
         self.cnxn_params = cnxn_params.copy()
-        self.cnxn_params['api_uri'] = "/almaws/v1/acq"
-        self.cnxn_params['web_doc'] = "https://developers.exlibrisgroup.com/alma/apis/acq"
-        self.cnxn_params['wadl_url'] = "https://developers.exlibrisgroup.com/resources/wadl/d5b14609-b590-470e-baba-9944682f8c7e.wadl"
+        self.cnxn_params['api_uri'] = '/almaws/v1/acq'
+        self.cnxn_params['web_doc'] = 'https://developers.exlibrisgroup.com/alma/apis/acq'
+        self.cnxn_params['wadl_url'] = 'https://developers.exlibrisgroup.com/resources/wadl/d5b14609-b590-470e-baba-9944682f8c7e.wadl'
         self.cnxn_params['api_uri_full'] = self.cnxn_params['base_uri']
         self.cnxn_params['api_uri_full'] += self.cnxn_params['api_uri']
 
@@ -37,8 +39,10 @@ class SubClientAcquistionsFunds(Client):
         self.cnxn_params['api_uri'] += '/funds'
         self.cnxn_params['api_uri_full'] += '/funds'
 
-    def get(self, limit=10, offset=0, library=None, all_records=False,
-            q_params={}, raw=False):
+    def get(
+        self, limit=10, offset=0, library=None, all_records=False,
+        q_params={}, raw=False,
+    ):
         """Retrieve a list of funds.
 
         Args:
@@ -69,8 +73,10 @@ class SubClientAcquistionsFunds(Client):
 
         # make multiple api calls until all records are retrieved
         if all_records:
-            response = self.__read_all__(url=url, args=args, raw=raw,
-                                         response=response, data_key='fund')
+            response = self.__read_all__(
+                url=url, args=args, raw=raw,
+                response=response, data_key='fund',
+            )
         return response
 
 
@@ -82,8 +88,10 @@ class SubClientAcquistionsPO(Client):
         self.cnxn_params['api_uri'] += '/po-lines'
         self.cnxn_params['api_uri_full'] += '/po-lines'
 
-    def get(self, po_line_id=None, query={}, limit=10, offset=0,
-            all_records=False, q_params={}, raw=False):
+    def get(
+        self, po_line_id=None, query={}, limit=10, offset=0,
+        all_records=False, q_params={}, raw=False,
+    ):
         """Retrieve a list or a single PO-Line.
 
         Args:
@@ -113,7 +121,7 @@ class SubClientAcquistionsPO(Client):
 
         url = self.cnxn_params['api_uri_full']
         if po_line_id:
-            url += ("/" + str(po_line_id))
+            url += ('/' + str(po_line_id))
         else:
             # include paramets specific to user list
             if int(limit) > 100:
@@ -135,8 +143,10 @@ class SubClientAcquistionsPO(Client):
 
         # make multiple api calls until all records are retrieved
         if all_records:
-            response = self.__read_all__(url=url, args=args, raw=raw,
-                                         response=response, data_key='po_line')
+            response = self.__read_all__(
+                url=url, args=args, raw=raw,
+                response=response, data_key='po_line',
+            )
         return response
 
     def get_items(self, po_line_id, q_params={}, raw=False):
@@ -155,7 +165,7 @@ class SubClientAcquistionsPO(Client):
         args['apikey'] = self.cnxn_params['api_key']
 
         url = self.cnxn_params['api_uri_full']
-        url += ("/" + str(po_line_id) + "/items")
+        url += ('/' + str(po_line_id) + '/items')
 
         response = self.read(url, args, raw=raw)
         return response
@@ -169,9 +179,11 @@ class SubClientAcquistionsVendors(Client):
         self.cnxn_params['api_uri'] += '/vendors'
         self.cnxn_params['api_uri_full'] += '/vendors'
 
-    def get(self, vendor_id=None, status='ALL', type_='ALL',
-            query={}, limit=10, offset=0, all_records=False,
-            q_params={}, raw=False):
+    def get(
+        self, vendor_id=None, status='ALL', type_='ALL',
+        query={}, limit=10, offset=0, all_records=False,
+        q_params={}, raw=False,
+    ):
         """Retrieve a vendor list or a single vendor.
 
         Args:
@@ -201,7 +213,7 @@ class SubClientAcquistionsVendors(Client):
 
         url = self.cnxn_params['api_uri_full']
         if vendor_id:
-            url += ("/" + str(vendor_id))
+            url += ('/' + str(vendor_id))
         else:
             # include paramets specific to user list
             if int(limit) > 100:
@@ -225,12 +237,16 @@ class SubClientAcquistionsVendors(Client):
 
         # make multiple api calls until all records are retrieved
         if all_records:
-            response = self.__read_all__(url=url, args=args, raw=raw,
-                                         response=response, data_key='vendor')
+            response = self.__read_all__(
+                url=url, args=args, raw=raw,
+                response=response, data_key='vendor',
+            )
         return response
 
-    def get_invoices(self, vendor_id, limit=10, offset=0, all_records=False,
-                     q_params={}, raw=False):
+    def get_invoices(
+        self, vendor_id, limit=10, offset=0, all_records=False,
+        q_params={}, raw=False,
+    ):
         """Retrieve invoices for a specific vendor.
 
         Args:
@@ -253,8 +269,8 @@ class SubClientAcquistionsVendors(Client):
         args['apikey'] = self.cnxn_params['api_key']
 
         url = self.cnxn_params['api_uri_full']
-        url += "/" + (str(vendor_id))
-        url += "/invoices"
+        url += '/' + (str(vendor_id))
+        url += '/invoices'
 
         if int(limit) > 100:
             limit = 100
@@ -269,12 +285,16 @@ class SubClientAcquistionsVendors(Client):
 
         # make multiple api calls until all records are retrieved
         if all_records:
-            response = self.__read_all__(url=url, args=args, raw=raw,
-                                         response=response, data_key='invoice')
+            response = self.__read_all__(
+                url=url, args=args, raw=raw,
+                response=response, data_key='invoice',
+            )
         return response
 
-    def get_po_lines(self, vendor_id, limit=10, offset=0, all_records=False,
-                     q_params={}, raw=False):
+    def get_po_lines(
+        self, vendor_id, limit=10, offset=0, all_records=False,
+        q_params={}, raw=False,
+    ):
         """Retrieve po-lines for a specific vendor.
 
         Args:
@@ -297,8 +317,8 @@ class SubClientAcquistionsVendors(Client):
         args['apikey'] = self.cnxn_params['api_key']
 
         url = self.cnxn_params['api_uri_full']
-        url += "/" + (str(vendor_id))
-        url += "/po-lines"
+        url += '/' + (str(vendor_id))
+        url += '/po-lines'
 
         if int(limit) > 100:
             limit = 100
@@ -313,8 +333,10 @@ class SubClientAcquistionsVendors(Client):
 
         # make multiple api calls until all records are retrieved
         if all_records:
-            response = self.__read_all__(url=url, args=args, raw=raw,
-                                         response=response, data_key='po_line')
+            response = self.__read_all__(
+                url=url, args=args, raw=raw,
+                response=response, data_key='po_line',
+            )
         return response
 
 
@@ -326,8 +348,10 @@ class SubClientAcquistionsInvoices(Client):
         self.cnxn_params['api_uri'] += '/invoices'
         self.cnxn_params['api_uri_full'] += '/invoices'
 
-    def get(self, invoice_id=None, query={}, limit=10, offset=0,
-            all_records=False, q_params={}, raw=False):
+    def get(
+        self, invoice_id=None, query={}, limit=10, offset=0,
+        all_records=False, q_params={}, raw=False,
+    ):
         """Retrieve a list or a single invoice.
 
         Args:
@@ -354,7 +378,7 @@ class SubClientAcquistionsInvoices(Client):
 
         url = self.cnxn_params['api_uri_full']
         if invoice_id:
-            url += ("/" + str(invoice_id))
+            url += ('/' + str(invoice_id))
         else:
             # include paramets specific to user list
             if int(limit) > 100:
@@ -376,8 +400,10 @@ class SubClientAcquistionsInvoices(Client):
 
         # make multiple api calls until all records are retrieved
         if all_records:
-            response = self.__read_all__(url=url, args=args, raw=raw,
-                                         response=response, data_key='invoice')
+            response = self.__read_all__(
+                url=url, args=args, raw=raw,
+                response=response, data_key='invoice',
+            )
         return response
 
 
@@ -389,9 +415,11 @@ class SubClientAcquistionsLicenses(Client):
         self.cnxn_params['api_uri'] += '/licenses'
         self.cnxn_params['api_uri_full'] += '/licenses'
 
-    def get(self, license_id=None, status='ALL', review_status='ALL',
-            query={}, limit=10, offset=0, all_records=False,
-            q_params={}, raw=False):
+    def get(
+        self, license_id=None, status='ALL', review_status='ALL',
+        query={}, limit=10, offset=0, all_records=False,
+        q_params={}, raw=False,
+    ):
         """Retrieve a list or a single license.
 
         Args:
@@ -420,7 +448,7 @@ class SubClientAcquistionsLicenses(Client):
 
         url = self.cnxn_params['api_uri_full']
         if license_id:
-            url += ("/" + str(license_id))
+            url += ('/' + str(license_id))
         else:
             # include paramets specific to user list
             if int(limit) > 100:
@@ -444,8 +472,10 @@ class SubClientAcquistionsLicenses(Client):
 
         # make multiple api calls until all records are retrieved
         if all_records:
-            response = self.__read_all__(url=url, args=args, raw=raw,
-                                         response=response, data_key='license')
+            response = self.__read_all__(
+                url=url, args=args, raw=raw,
+                response=response, data_key='license',
+            )
         return response
 
     def get_amendments(self, license_id, amendment_id=None, q_params={}, raw=False):
@@ -465,9 +495,9 @@ class SubClientAcquistionsLicenses(Client):
         args['apikey'] = self.cnxn_params['api_key']
 
         url = self.cnxn_params['api_uri_full']
-        url += ("/" + str(license_id) + "/amendments")
+        url += ('/' + str(license_id) + '/amendments')
         if amendment_id:
-            url += ("/" + str(amendment_id))
+            url += ('/' + str(amendment_id))
 
         response = self.read(url, args, raw=raw)
         return response

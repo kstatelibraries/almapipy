@@ -1,5 +1,7 @@
-from .client import Client
+from __future__ import annotations
+
 from . import utils
+from .client import Client
 
 
 class SubClientTaskList(Client):
@@ -14,9 +16,9 @@ class SubClientTaskList(Client):
 
         # Copy cnnection parameters and add info specific to API.
         self.cnxn_params = cnxn_params.copy()
-        self.cnxn_params['api_uri'] = "/almaws/v1/task-lists"
-        self.cnxn_params['web_doc'] = "https://developers.exlibrisgroup.com/alma/apis/taskslists"
-        self.cnxn_params['wadl_url'] = "https://developers.exlibrisgroup.com/resources/wadl/d48a1a58-d90c-4eb2-b69f-c17f7a016fd3.wadl"
+        self.cnxn_params['api_uri'] = '/almaws/v1/task-lists'
+        self.cnxn_params['web_doc'] = 'https://developers.exlibrisgroup.com/alma/apis/taskslists'
+        self.cnxn_params['wadl_url'] = 'https://developers.exlibrisgroup.com/resources/wadl/d48a1a58-d90c-4eb2-b69f-c17f7a016fd3.wadl'
         self.cnxn_params['api_uri_full'] = self.cnxn_params['base_uri']
         self.cnxn_params['api_uri_full'] += self.cnxn_params['api_uri']
 
@@ -33,8 +35,10 @@ class SubClientTaskListResources(Client):
         self.cnxn_params['api_uri'] += '/requested-resources'
         self.cnxn_params['api_uri_full'] += '/requested-resources'
 
-    def get(self, library_id, circ_desk, limit=10, offset=0,
-            all_records=False, q_params={}, raw=False):
+    def get(
+        self, library_id, circ_desk, limit=10, offset=0,
+        all_records=False, q_params={}, raw=False,
+    ):
         """Retrieve a list of requested resources to be picked from the shelf in Alma
             for a specific library/circ_desk.
 
@@ -74,9 +78,11 @@ class SubClientTaskListResources(Client):
 
         # make multiple api calls until all records are retrieved
         if all_records:
-            response = self.__read_all__(url=url, args=args,
-                                         raw=raw, response=response,
-                                         data_key='requested_resource')
+            response = self.__read_all__(
+                url=url, args=args,
+                raw=raw, response=response,
+                data_key='requested_resource',
+            )
         return response
 
 
