@@ -257,6 +257,101 @@ class SubClientBibsCatalog(Client):
 
         return response
 
+    def put(self, bib_id, body=None, normalization=None, validate=False, q_params={}, raw=True):
+        """Update a Bib record
+
+        Args:
+            data (xml/str): This method takes a Bib object.
+                For an IZ record that is linked to NZ record, local fields will be replaced - based on $$9local field indication.
+                Updating of non-local fields should be done directly on the NZ record
+                Note: JSON is not supported for this API.
+            bib_id (str): The bib ID (mms_id).
+            normalization (str): The id of the normalization profile to run.
+            validate (bool): Boolean flag for indicating whether to validate the record.
+            q_params (dict): Any additional query parameters.
+            raw (bool): If true, returns raw requests object.
+
+        Returns:
+            Bib object created.
+
+        """
+        url = self.cnxn_params['api_uri_full']
+        object_type = 'bib'
+        url += ('/' + str(bib_id))
+
+        args = q_params.copy()
+        args['apikey'] = self.cnxn_params['api_key']
+        args['format'] = 'xml'
+
+        if normalization:
+            args['normalization'] = normalization
+        if validate:
+            args['validate'] = validate
+
+        response = self.update(url, body, args, object_type, raw=raw)
+
+        return response
+
+    def put_holdings(self, bib_id, holding_id, body, q_params={}, raw=True):
+        """Update a Holding record
+
+        Args:
+            data (xml/str): This method takes a Holding object.
+                Note: JSON is not supported for this API.
+            bib_id (str): The bib ID (mms_id).
+            holding_id (str): The Holding Record ID (holding_id).
+            q_params (dict): Any additional query parameters.
+            raw (bool): If true, returns raw requests object.
+
+        Returns:
+            Holding object created.
+
+        """
+        url = self.cnxn_params['api_uri_full']
+        url += ('/' + str(bib_id))
+        url += '/holdings'
+        if holding_id:
+            url += ('/' + str(holding_id))
+        object_type = 'holding'
+
+        args = q_params.copy()
+        args['apikey'] = self.cnxn_params['api_key']
+        args['format'] = 'xml'
+
+        response = self.update(url, body, args, object_type, raw=raw)
+
+        return response
+
+    def put_item(self, bib_id, holding_id, item_id, body, q_params={}, raw=True):
+        """Update an Item record
+
+        Args:
+            data (xml/str): This method takes a Item object.
+                Note: JSON is not supported for this API.
+            bib_id (str): The bib ID (mms_id).
+            holding_id (str): The Holding Record ID (holding_id).
+            item_id (str): The Item Record id (item_pid).
+            q_params (dict): Any additional query parameters.
+            raw (bool): If true, returns raw requests object.
+
+        Returns:
+            Item object created.
+
+        """
+        url = self.cnxn_params['api_uri_full']
+        url += ('/' + str(bib_id))
+        url += ('/holdings/' + str(holding_id)) + '/items'
+        if item_id:
+            url += ('/' + str(item_id))
+        object_type = 'item'
+
+        args = q_params.copy()
+        args['apikey'] = self.cnxn_params['api_key']
+        args['format'] = 'xml'
+
+        response = self.update(url, body, args, object_type, raw=raw)
+
+        return response
 
 class SubClientBibsCollections(Client):
     """Handles collections"""
