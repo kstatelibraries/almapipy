@@ -4,11 +4,10 @@ Common Client for interacting with Alma API
 from __future__ import annotations
 
 import json
+import re
 import xml.etree.ElementTree as ET
 
 import requests
-
-import re
 
 from . import utils
 
@@ -21,7 +20,7 @@ class Client(object):
     def __init__(self, cnxn_params={}):
         # instantiate dictionary for storing alma api connection parameters
         self.cnxn_params = cnxn_params
-    
+
     def clean_xml(self, xml_string):
         # Remove invalid characters
         xml_string = re.sub(r'[\x00-\x08\x0B\x0C\x0E-\x1F]', '', xml_string)
