@@ -257,7 +257,7 @@ class SubClientBibsCatalog(Client):
 
         return response
 
-    def put(self, bib_id, body=None, normalization=None, validate=False, q_params={}, raw=True):
+    def put(self, bib_id, body=None, normalization=None, validate=False, q_params={}, raw=False):
         """Update a Bib record
 
         Args:
