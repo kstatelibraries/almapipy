@@ -8,6 +8,8 @@ import xml.etree.ElementTree as ET
 
 import requests
 
+import re
+
 from . import utils
 
 
@@ -19,6 +21,20 @@ class Client(object):
     def __init__(self, cnxn_params={}):
         # instantiate dictionary for storing alma api connection parameters
         self.cnxn_params = cnxn_params
+    
+    def clean_xml(self, xml_string):
+        # Remove invalid characters
+        xml_string = re.sub(r'[\x00-\x08\x0B\x0C\x0E-\x1F]', '', xml_string)
+        xml_string = re.sub(r'[^\x00-\x7F]+', '', xml_string)
+        # Ensure proper XML formatting
+        try:
+            root = ET.fromstring(xml_string)
+            return ET.tostring(root, encoding='unicode')
+        except ET.ParseError:
+            # Handle malformed XML by fixing common issues
+            xml_string = xml_string.replace('><', '>\n<')
+            xml_string = re.sub(r'<([^>]+?)\/>', r'<\1></\1>', xml_string)
+            return xml_string
 
     def create(self, url, data, args, object_type, raw=False):
         """
