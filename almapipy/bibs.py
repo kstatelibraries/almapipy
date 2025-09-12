@@ -287,8 +287,9 @@ class SubClientBibsCatalog(Client):
             args['normalization'] = normalization
         if validate:
             args['validate'] = validate
-
-        response = self.update(url, body, args, object_type, raw=raw)
+            
+        cleanxml = self.clean_xml(body)
+        response = self.update(url, cleanxml, args, object_type, raw=raw)
 
         return response
 
