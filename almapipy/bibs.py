@@ -293,7 +293,7 @@ class SubClientBibsCatalog(Client):
 
         return response
 
-    def put_holdings(self, bib_id, holding_id, body, q_params={}, raw=True):
+    def put_holdings(self, bib_id, holding_id, body, q_params={}, raw=False):
         """Update a Holding record
 
         Args:
@@ -323,7 +323,7 @@ class SubClientBibsCatalog(Client):
 
         return response
 
-    def put_item(self, bib_id, holding_id, item_id, body, q_params={}, raw=True):
+    def put_item(self, bib_id, holding_id, item_id, body, q_params={}, raw=False):
         """Update an Item record
 
         Args:
