@@ -11,7 +11,7 @@ Post, Put and Delete functions will be gradually added in future releases.
 
 | API | Get | Post | Put | Delete |
 | --- | :---: | :---: | :---: | :---: |
-| [bibs](#access-bibliographic-data) | X | | | |
+| [bibs](#access-bibliographic-data) | X |  | X | |
 | [analytics](#access-reports) | X | NA | NA | NA |
 | [acquisitions](#access-acquisitions) | X | | | |
 | [configuration](#access-configuration-settings) | X | | | |
@@ -54,6 +54,25 @@ alma.bibs.representations.get(harry_potter)
 
 # get linked data
 alma.bibs.linked_data.get(harry_potter)
+```
+
+### Update Bibliographic Data
+```python
+# update bibliogrpahic record
+mms_id = "9980963346303126"
+bib_record = alma.bibs.catalog.get(mms_id)
+alma.bibs.catalog.put(mms_id, bib_record, raw=True)
+
+# update holdings record
+holding_id = '22451851260002401'
+holding_record = alma.bibs.catalog.get_holdings(mms_id, holding_id)
+alma.bibs.catalog.put_holdings(mms_id, holding_id, holding_record, raw=True)
+
+# update item record
+item_id = '23144944750002401'
+item_record = alma.bibs.catalog.get_holding_items(mms_id, holding_id, item_id)
+alma.bibs.catalog.put_item(mms_id, holding_id, item_id, item_record, raw=True)
+
 ```
 
 ### Access Reports
