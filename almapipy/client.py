@@ -4,7 +4,6 @@ Common Client for interacting with Alma API
 from __future__ import annotations
 
 import json
-import re
 import xml.etree.ElementTree as ET
 
 import requests
@@ -20,20 +19,6 @@ class Client(object):
     def __init__(self, cnxn_params={}):
         # instantiate dictionary for storing alma api connection parameters
         self.cnxn_params = cnxn_params
-
-    def clean_xml(self, xml_string):
-        # Remove invalid characters
-        xml_string = re.sub(r'[\x00-\x08\x0B\x0C\x0E-\x1F]', '', xml_string)
-        xml_string = re.sub(r'[^\x00-\x7F]+', '', xml_string)
-        # Ensure proper XML formatting
-        try:
-            root = ET.fromstring(xml_string)
-            return ET.tostring(root, encoding='unicode')
-        except ET.ParseError:
-            # Handle malformed XML by fixing common issues
-            xml_string = xml_string.replace('><', '>\n<')
-            xml_string = re.sub(r'<([^>]+?)\/>', r'<\1></\1>', xml_string)
-            return xml_string
 
     def create(self, url, data, args, object_type, raw=False):
         """
@@ -120,15 +105,15 @@ class Client(object):
 
         return content
 
-    def update(self, url, data, args, object_type, raw=False):
+    def update(self, url, data, args, raw=False):
         """
         Uses requests library to make Exlibris API Put call.
         Returns data of type specified during init of base class.
 
         Args:
             url (str): Exlibris API endpoint url.
+            data (dict): Data to be updated.
             args (dict): Query string parameters for API call.
-            object_type (str): Type of object to be posted (see alma docs)
             raw (bool): If true, returns raw response.
 
         Returns:
