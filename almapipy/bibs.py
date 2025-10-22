@@ -257,11 +257,11 @@ class SubClientBibsCatalog(Client):
 
         return response
 
-    def put(self, bib_id, body=None, normalization=None, validate=False, q_params={}, raw=False):
+    def put(self, bib_id, body, normalization=None, validate=False, q_params={}, raw=False):
         """Update a Bib record
 
         Args:
-            data (xml/str): This method takes a Bib object.
+            body (xml/str): This method takes a Bib object.
                 For an IZ record that is linked to NZ record, local fields will be replaced - based on $$9local field indication.
                 Updating of non-local fields should be done directly on the NZ record
                 Note: JSON is not supported for this API.
@@ -272,11 +272,10 @@ class SubClientBibsCatalog(Client):
             raw (bool): If true, returns raw requests object.
 
         Returns:
-            Bib object created.
+            Bib object updated.
 
         """
         url = self.cnxn_params['api_uri_full']
-        object_type = 'bib'
         url += ('/' + str(bib_id))
 
         args = q_params.copy()
@@ -288,8 +287,8 @@ class SubClientBibsCatalog(Client):
         if validate:
             args['validate'] = validate
 
-        cleanxml = self.clean_xml(body)
-        response = self.update(url, cleanxml, args, object_type, raw=raw)
+        cleanxml = utils.Formatter.clean_xml(body)
+        response = self.update(url, cleanxml, args, raw=raw)
 
         return response
 
@@ -297,7 +296,7 @@ class SubClientBibsCatalog(Client):
         """Update a Holding record
 
         Args:
-            data (xml/str): This method takes a Holding object.
+            body (xml/str): This method takes a Holding object.
                 Note: JSON is not supported for this API.
             bib_id (str): The bib ID (mms_id).
             holding_id (str): The Holding Record ID (holding_id).
@@ -305,7 +304,7 @@ class SubClientBibsCatalog(Client):
             raw (bool): If true, returns raw requests object.
 
         Returns:
-            Holding object created.
+            Holding object updated.
 
         """
         url = self.cnxn_params['api_uri_full']
@@ -313,13 +312,12 @@ class SubClientBibsCatalog(Client):
         url += '/holdings'
         if holding_id:
             url += ('/' + str(holding_id))
-        object_type = 'holding'
 
         args = q_params.copy()
         args['apikey'] = self.cnxn_params['api_key']
         args['format'] = 'xml'
 
-        response = self.update(url, body, args, object_type, raw=raw)
+        response = self.update(url, body, args, raw=raw)
 
         return response
 
@@ -327,7 +325,7 @@ class SubClientBibsCatalog(Client):
         """Update an Item record
 
         Args:
-            data (xml/str): This method takes a Item object.
+            body (xml/str): This method takes a Item object.
                 Note: JSON is not supported for this API.
             bib_id (str): The bib ID (mms_id).
             holding_id (str): The Holding Record ID (holding_id).
@@ -336,7 +334,7 @@ class SubClientBibsCatalog(Client):
             raw (bool): If true, returns raw requests object.
 
         Returns:
-            Item object created.
+            Item object updated.
 
         """
         url = self.cnxn_params['api_uri_full']
@@ -344,13 +342,12 @@ class SubClientBibsCatalog(Client):
         url += ('/holdings/' + str(holding_id)) + '/items'
         if item_id:
             url += ('/' + str(item_id))
-        object_type = 'item'
 
         args = q_params.copy()
         args['apikey'] = self.cnxn_params['api_key']
         args['format'] = 'xml'
 
-        response = self.update(url, body, args, object_type, raw=raw)
+        response = self.update(url, body, args, raw=raw)
 
         return response
 
