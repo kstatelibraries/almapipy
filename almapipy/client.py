@@ -105,6 +105,60 @@ class Client(object):
 
         return content
 
+    def update(self, url, data, args, raw=False):
+        """
+        Uses requests library to make Exlibris API Put call.
+        Returns data of type specified during init of base class.
+
+        Args:
+            url (str): Exlibris API endpoint url.
+            data (dict): Data to be updated.
+            args (dict): Query string parameters for API call.
+            raw (bool): If true, returns raw response.
+
+        Returns:
+            JSON-esque, xml, or raw response.
+        """
+
+        # handle data format. Allow for overriding of global setting.
+        headers = {}
+        if 'format' not in args.keys():
+            if type(data) == ET or type(data) == ET.Element:
+                content_type = 'xml'
+            elif type(data) == dict:
+                content_type = 'json'
+            else:
+                content_type = self.cnxn_params['format']
+            args['format'] = self.cnxn_params['format']
+        else:
+            content_type = args['format']
+
+        # Declare data type in header, convert to string if necessary.
+        if content_type == 'json':
+            headers['content-type'] = 'application/json'
+            if type(data) != str:
+                data = json.dumps(data)
+        elif content_type == 'xml':
+            headers['content-type'] = 'application/xml'
+            if type(data) == ET or type(data) == ET.Element:
+                data = ET.tostring(data, encoding='unicode')
+            elif type(data) != str:
+                message = 'XML payload must be either string or ElementTree.'
+                raise utils.ArgError(message)
+        else:
+            message = "Put content type must be either 'json' or 'xml'"
+            raise utils.ArgError(message)
+
+        # Send request and parse response.
+        response = requests.put(url, data=data, params=args, headers=headers)
+        if raw:
+            return response
+
+        # Parse content
+        content = self.__parse_response__(response)
+
+        return content
+
     def __format_query__(self, query):
         """Converts dictionary of brief search query to a formated string.
         https://developers.exlibrisgroup.com/blog/How-we-re-building-APIs-at-Ex-Libris#BriefSearch
